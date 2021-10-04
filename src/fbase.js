@@ -1,5 +1,5 @@
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";
 
 // firebase V 9
 // import firebase from 'firebase/compat/app';
@@ -15,5 +15,7 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
+
+export const firebaseInstance = firebase;
 
 export const authService = firebase.auth();
