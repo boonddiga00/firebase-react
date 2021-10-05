@@ -30,19 +30,21 @@ const Tweet = ({ tweetObj, isOwner }) => {
   return (
     <div>
       {isEditing ? (
-        <>
-          <form onSubmit={onSubmit}>
-            <input
-              onChange={onChange}
-              type="text"
-              value={newTweet}
-              placeholder="Edit your Tweet"
-              required
-            />
-            <input type="submit" value="Update" />
-          </form>
-          <button onClick={toggleEditing}>Cancle</button>
-        </>
+        isOwner && (
+          <>
+            <form onSubmit={onSubmit}>
+              <input
+                onChange={onChange}
+                type="text"
+                value={newTweet}
+                placeholder="Edit your Tweet"
+                required
+              />
+              <input type="submit" value="Update" />
+            </form>
+            <button onClick={toggleEditing}>Cancle</button>
+          </>
+        )
       ) : (
         <>
           <h4>{tweetObj.text}</h4>
