@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Tweet from "../components/Tweet";
 import { dbService } from "../fbase";
 
 const Home = ({ userObj }) => {
   const [tweet, setTweet] = useState("");
   const [tweets, setTweets] = useState([]);
+  const [attatchment, setAttatchment] = useState();
+  const fileInput = useRef();
   const onSubmit = async (event) => {
     event.preventDefault();
     await dbService.collection("tweets").add({
@@ -19,6 +21,23 @@ const Home = ({ userObj }) => {
       target: { value },
     } = event;
     setTweet(value);
+  };
+  const onFileChange = (event) => {
+    const {
+      target: { files },
+    } = event;
+    const reader = new FileReader();
+    reader.onloadend = (finishedEvent) => {
+      const {
+        currentTarget: { result },
+      } = finishedEvent;
+      setAttatchment(result);
+    };
+    reader.readAsDataURL(files[0]);
+  };
+  const onClearAttatchment = () => {
+    setAttatchment(null);
+    fileInput.current.value = null;
   };
   useEffect(() => {
     dbService
@@ -42,6 +61,24 @@ const Home = ({ userObj }) => {
           maxLength="120"
           placeholder="What's on your mind?"
         />
+        <input
+          ref={fileInput}
+          onChange={onFileChange}
+          type="file"
+          accept="image/*"
+        />
+        {attatchment && (
+          <>
+            <img
+              src={attatchment}
+              alt="Uploaded"
+              title="Uploaded"
+              width="100px"
+              height="100px"
+            />
+            <button onClick={onClearAttatchment}>Clear</button>
+          </>
+        )}
         <input type="submit" value="Tweet" />
       </form>
       <div>
